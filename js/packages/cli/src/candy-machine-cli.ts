@@ -19,6 +19,7 @@ import {
   CONFIG_LINE_SIZE,
   EXTENSION_JSON,
   EXTENSION_PNG,
+  EXTENSION_MP4,
 } from './helpers/constants';
 import {
   getCandyMachineAddress,
@@ -110,6 +111,9 @@ programCommand('upload')
     const pngFileCount = files.filter(it => {
       return it.endsWith(EXTENSION_PNG);
     }).length;
+    const mp4FileCount = files.filter(it => {
+      return it.endsWith(EXTENSION_MP4);
+    }).length;
     const jsonFileCount = files.filter(it => {
       return it.endsWith(EXTENSION_JSON);
     }).length;
@@ -120,6 +124,12 @@ programCommand('upload')
     if (pngFileCount !== jsonFileCount) {
       throw new Error(
         `number of png files (${pngFileCount}) is different than the number of json files (${jsonFileCount})`,
+      );
+    }
+
+    if (mp4FileCount !== jsonFileCount) {
+      throw new Error(
+        `number of mp4 files (${mp4FileCount}) is different than the number of json files (${jsonFileCount})`,
       );
     }
 

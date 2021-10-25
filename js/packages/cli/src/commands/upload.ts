@@ -1,4 +1,4 @@
-import { EXTENSION_PNG } from '../helpers/constants';
+import { EXTENSION_PNG, EXTENSION_MP4 } from '../helpers/constants';
 import path from 'path';
 import {
   createConfig,
@@ -45,6 +45,8 @@ export async function upload(
 
   const seen = {};
   const newFiles = [];
+  const seenV = {};
+  const newFilesV = [];
 
   files.forEach(f => {
     if (!seen[f.replace(EXTENSION_PNG, '').split('/').pop()]) {
@@ -59,8 +61,23 @@ export async function upload(
     }
   });
 
+  files.forEach(f => {
+    if (!seenV[f.replace(EXTENSION_MP4, '').split('/').pop()]) {
+      seenV[f.replace(EXTENSION_MP4, '').split('/').pop()] = true;
+      newFilesV.push(f);
+    }
+  });
+  existingInCache.forEach(f => {
+    if (!seenV[f]) {
+      seenV[f] = true;
+      newFilesV.push(f + '.mp4');
+    }
+  });
+
   const images = newFiles.filter(val => path.extname(val) === EXTENSION_PNG);
   const SIZE = images.length;
+
+  const videos = newFilesV.filter(val => path.extname(val) === EXTENSION_MP4);
 
   const walletKeyPair = loadWalletKey(keypair);
   const anchorProgram = await loadCandyProgram(walletKeyPair, env);
@@ -72,6 +89,8 @@ export async function upload(
   for (let i = 0; i < SIZE; i++) {
     const image = images[i];
     const imageName = path.basename(image);
+    const video = videos[i];
+    const videoName = path.basename(video);
     const index = imageName.replace(EXTENSION_PNG, '');
 
     log.debug(`Processing file: ${i}`);
@@ -86,7 +105,9 @@ export async function upload(
         .readFileSync(manifestPath)
         .toString()
         .replace(imageName, 'image.png')
-        .replace(imageName, 'image.png');
+        .replace(imageName, 'image.png')
+        .replace(videoName, 'video.mp4')
+        .replace(videoName, 'video.mp4');
       const manifest = JSON.parse(manifestContent);
 
       const manifestBuffer = Buffer.from(JSON.stringify(manifest));
@@ -133,6 +154,7 @@ export async function upload(
               anchorProgram,
               env,
               image,
+              video,
               manifestBuffer,
               manifest,
               index,

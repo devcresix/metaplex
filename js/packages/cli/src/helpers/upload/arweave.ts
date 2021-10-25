@@ -25,11 +25,12 @@ export async function arweaveUpload(
   anchorProgram,
   env,
   image,
+  video,
   manifestBuffer,
   manifest,
   index,
 ) {
-  const storageCost = 2300000; // 0.0023 SOL per file (paid to arweave)
+  const storageCost = 2300000 * 2; // 0.0023 SOL per file (paid to arweave)
 
   const instructions = [
     anchor.web3.SystemProgram.transfer({
@@ -54,6 +55,10 @@ export async function arweaveUpload(
   data.append('file[]', fs.createReadStream(image), {
     filename: `image.png`,
     contentType: 'image/png',
+  });
+  data.append('file[]', fs.createReadStream(video), {
+    filename: `video.mp4`,
+    contentType: 'video/mp4',
   });
   data.append('file[]', manifestBuffer, 'metadata.json');
 
