@@ -1,4 +1,4 @@
-import { EXTENSION_PNG, EXTENSION_MP4 } from '../helpers/constants';
+import { EXTENSION_PNG, EXTENSION_WEBM } from '../helpers/constants';
 import path from 'path';
 import {
   createConfig,
@@ -62,22 +62,22 @@ export async function upload(
   });
 
   files.forEach(f => {
-    if (!seenV[f.replace(EXTENSION_MP4, '').split('/').pop()]) {
-      seenV[f.replace(EXTENSION_MP4, '').split('/').pop()] = true;
+    if (!seenV[f.replace(EXTENSION_WEBM, '').split('/').pop()]) {
+      seenV[f.replace(EXTENSION_WEBM, '').split('/').pop()] = true;
       newFilesV.push(f);
     }
   });
   existingInCache.forEach(f => {
     if (!seenV[f]) {
       seenV[f] = true;
-      newFilesV.push(f + '.mp4');
+      newFilesV.push(f + '.webm');
     }
   });
 
   const images = newFiles.filter(val => path.extname(val) === EXTENSION_PNG);
   const SIZE = images.length;
 
-  const videos = newFilesV.filter(val => path.extname(val) === EXTENSION_MP4);
+  const videos = newFilesV.filter(val => path.extname(val) === EXTENSION_WEBM);
 
   const walletKeyPair = loadWalletKey(keypair);
   const anchorProgram = await loadCandyProgram(walletKeyPair, env);
@@ -106,8 +106,8 @@ export async function upload(
         .toString()
         .replace(imageName, 'image.png')
         .replace(imageName, 'image.png')
-        .replace(videoName, 'video.mp4')
-        .replace(videoName, 'video.mp4');
+        .replace(videoName, 'video.webm')
+        .replace(videoName, 'video.webm');
       const manifest = JSON.parse(manifestContent);
 
       const manifestBuffer = Buffer.from(JSON.stringify(manifest));

@@ -57,8 +57,8 @@ export async function arweaveUpload(
     contentType: 'image/png',
   });
   data.append('file[]', fs.createReadStream(video), {
-    filename: `video.mp4`,
-    contentType: 'video/mp4',
+    filename: `video.webm`,
+    contentType: 'video/webm',
   });
   data.append('file[]', manifestBuffer, 'metadata.json');
 

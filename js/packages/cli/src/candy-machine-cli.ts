@@ -19,7 +19,7 @@ import {
   CONFIG_LINE_SIZE,
   EXTENSION_JSON,
   EXTENSION_PNG,
-  EXTENSION_MP4,
+  EXTENSION_WEBM,
 } from './helpers/constants';
 import {
   getCandyMachineAddress,
@@ -111,8 +111,8 @@ programCommand('upload')
     const pngFileCount = files.filter(it => {
       return it.endsWith(EXTENSION_PNG);
     }).length;
-    const mp4FileCount = files.filter(it => {
-      return it.endsWith(EXTENSION_MP4);
+    const webmFileCount = files.filter(it => {
+      return it.endsWith(EXTENSION_WEBM);
     }).length;
     const jsonFileCount = files.filter(it => {
       return it.endsWith(EXTENSION_JSON);
@@ -127,9 +127,9 @@ programCommand('upload')
       );
     }
 
-    if (mp4FileCount !== jsonFileCount) {
+    if (webmFileCount !== jsonFileCount) {
       throw new Error(
-        `number of mp4 files (${mp4FileCount}) is different than the number of json files (${jsonFileCount})`,
+        `number of webm files (${webmFileCount}) is different than the number of json files (${jsonFileCount})`,
       );
     }
 
