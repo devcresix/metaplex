@@ -1,4 +1,4 @@
-import { EXTENSION_PNG, EXTENSION_MP4 } from '../helpers/constants';
+import { EXTENSION_GIF, EXTENSION_MP4 } from '../helpers/constants';
 import path from 'path';
 import {
   createConfig,
@@ -49,15 +49,15 @@ export async function upload(
   const newFilesV = [];
 
   files.forEach(f => {
-    if (!seen[f.replace(EXTENSION_PNG, '').split('/').pop()]) {
-      seen[f.replace(EXTENSION_PNG, '').split('/').pop()] = true;
+    if (!seen[f.replace(EXTENSION_GIF, '').split('/').pop()]) {
+      seen[f.replace(EXTENSION_GIF, '').split('/').pop()] = true;
       newFiles.push(f);
     }
   });
   existingInCache.forEach(f => {
     if (!seen[f]) {
       seen[f] = true;
-      newFiles.push(f + '.png');
+      newFiles.push(f + '.gif');
     }
   });
 
@@ -74,7 +74,7 @@ export async function upload(
     }
   });
 
-  const images = newFiles.filter(val => path.extname(val) === EXTENSION_PNG);
+  const images = newFiles.filter(val => path.extname(val) === EXTENSION_GIF);
   const SIZE = images.length;
 
   const videos = newFilesV.filter(val => path.extname(val) === EXTENSION_MP4);
@@ -91,7 +91,7 @@ export async function upload(
     const imageName = path.basename(image);
     const video = videos[i];
     const videoName = path.basename(video);
-    const index = imageName.replace(EXTENSION_PNG, '');
+    const index = imageName.replace(EXTENSION_GIF, '');
 
     log.debug(`Processing file: ${i}`);
     if (i % 50 === 0) {
@@ -100,12 +100,12 @@ export async function upload(
 
     let link = cacheContent?.items?.[index]?.link;
     if (!link || !cacheContent.program.uuid) {
-      const manifestPath = image.replace(EXTENSION_PNG, '.json');
+      const manifestPath = image.replace(EXTENSION_GIF, '.json');
       const manifestContent = fs
         .readFileSync(manifestPath)
         .toString()
-        .replace(imageName, 'image.png')
-        .replace(imageName, 'image.png')
+        .replace(imageName, 'image.gif')
+        .replace(imageName, 'image.gif')
         .replace(videoName, 'video.mp4')
         .replace(videoName, 'video.mp4');
       const manifest = JSON.parse(manifestContent);

@@ -18,8 +18,8 @@ import {
   CONFIG_ARRAY_START,
   CONFIG_LINE_SIZE,
   EXTENSION_JSON,
-  EXTENSION_PNG,
   EXTENSION_MP4,
+  EXTENSION_GIF,
 } from './helpers/constants';
 import {
   getCandyMachineAddress,
@@ -109,7 +109,7 @@ programCommand('upload')
     };
 
     const pngFileCount = files.filter(it => {
-      return it.endsWith(EXTENSION_PNG);
+      return it.endsWith(EXTENSION_GIF);
     }).length;
     const mp4FileCount = files.filter(it => {
       return it.endsWith(EXTENSION_MP4);
@@ -123,7 +123,7 @@ programCommand('upload')
 
     if (pngFileCount !== jsonFileCount) {
       throw new Error(
-        `number of png files (${pngFileCount}) is different than the number of json files (${jsonFileCount})`,
+        `number of gif files (${pngFileCount}) is different than the number of json files (${jsonFileCount})`,
       );
     }
 
@@ -139,7 +139,7 @@ programCommand('upload')
       );
     }
 
-    log.info(`Beginning the upload for ${elemCount} (png+json) pairs`);
+    log.info(`Beginning the upload for ${elemCount} (gif+mp4+json) pairs`);
 
     const startMs = Date.now();
     log.info('started at: ' + startMs.toString());

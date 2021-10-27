@@ -38,6 +38,7 @@ export async function ipfsUpload(
     method: 'POST',
   });
   log.info('uploaded image for file:', image);
+
   await sleep(500);
   const mediaHashV = await uploadToIpfs(globSource(video, { recursive: true }));
   log.debug('mediaHashV:', mediaHashV);
