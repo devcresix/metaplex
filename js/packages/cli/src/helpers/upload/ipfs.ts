@@ -14,6 +14,7 @@ function sleep(ms: number): Promise<void> {
 export async function ipfsUpload(
   ipfsCredentials: ipfsCreds,
   image: string,
+  video: string,
   manifestBuffer: Buffer,
 ) {
   const tokenIfps = `${ipfsCredentials.projectId}:${ipfsCredentials.secretKey}`;
@@ -37,13 +38,26 @@ export async function ipfsUpload(
     method: 'POST',
   });
   log.info('uploaded image for file:', image);
+  await sleep(500);
+  const mediaHashV = await uploadToIpfs(globSource(video, { recursive: true }));
+  log.debug('mediaHashV:', mediaHashV);
+  const mediaUrlV = `https://ipfs.io/ipfs/${mediaHashV}`;
+  log.debug('mediaUrlV:', mediaUrlV);
+  await fetch(`https://ipfs.infura.io:5001/api/v0/pin/add?arg=${mediaHashV}`, {
+    headers: {
+      Authorization: `Basic ${authIFPS}`,
+    },
+    method: 'POST',
+  });
+  log.info('uploaded video for file:', video);
 
   await sleep(500);
 
   const manifestJson = JSON.parse(manifestBuffer.toString('utf8'));
   manifestJson.image = mediaUrl;
+  manifestJson.animation_url = mediaUrlV;
   manifestJson.properties.files = manifestJson.properties.files.map(f => {
-    return { ...f, uri: mediaUrl };
+    return { ...f, uri: f.type.includes('image') ? mediaUrl : mediaUrlV };
   });
 
   const manifestHash = await uploadToIpfs(
