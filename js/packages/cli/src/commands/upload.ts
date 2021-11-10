@@ -160,7 +160,12 @@ export async function upload(
               index,
             );
           } else if (storage === 'ipfs') {
-            link = await ipfsUpload(ipfsCredentials, image, manifestBuffer);
+            link = await ipfsUpload(
+              ipfsCredentials,
+              image,
+              video,
+              manifestBuffer,
+            );
           } else if (storage === 'aws') {
             link = await awsUpload(awsS3Bucket, image, manifestBuffer);
           }
